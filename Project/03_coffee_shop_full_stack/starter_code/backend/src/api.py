@@ -11,18 +11,13 @@ app = Flask(__name__)
 setup_db(app)
 cors = CORS(app)
 
-@app.route('/')
-def index():
-    return jsonify({
-        'success': True,
-        'message':'hello-coffee'})
 '''
 @TODO uncomment the following line to initialize the datbase
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 !! Running this funciton will add one
 '''
-#db_drop_and_create_all()
+db_drop_and_create_all()
 
 # ROUTES
 '''
@@ -34,16 +29,12 @@ def index():
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks', methods = ['GET'])
-@requires_auth('get:drinks')
-def get_drinks(payload):
-    try:
+def get_drinks():
         drinks = Drink.query.all()
         return jsonify({
             'success': 'True',
             'drinks': [drink.short() for drink in drinks]
             })
-    except:
-        abort(404)
 '''
 @TODO implement endpoint
     GET /drinks-detail
@@ -52,17 +43,15 @@ def get_drinks(payload):
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
-@app.route('/drinks-details', methods = ['GET'])
+@app.route('/drinks-detail', methods = ['GET'])
 @requires_auth('get:drinks-detail')
 def get_drinks_detail(payload):
-    try:
-        drinks = Drink.query.all()
-        return jsonify({
-            'success': 'True',
-            'drinks': [drink.long() for drink in drinks]
-            })
-    except:
-        abort(404)
+    drinks = Drink.query.all()
+    return jsonify({
+        'success': 'True',
+        'drinks': [drink.long() for drink in drinks]
+        })
+    
 '''
 @TODO implement endpoint
     POST /drinks

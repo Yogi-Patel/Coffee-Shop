@@ -71,6 +71,7 @@ def get_token_auth_header():
 	return true otherwise
 '''
 def check_permissions(permission, payload):
+	print(payload['permissions'])
 	if 'permissions' not in payload:
 		raise AuthError({
 			'code': 'invalid_permissions',
@@ -80,7 +81,7 @@ def check_permissions(permission, payload):
 		raise AuthError({
 			'code': 'not_authroized',
 			'description': 'Do not have permission to carry out the task'
-			}, 401)
+			}, 403)
 	else:
 		return True
 
